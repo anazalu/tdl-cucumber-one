@@ -23,15 +23,6 @@ public class ExampleSteps {
         driver.get("https://www.automationexercise.com/");
     }
 
-    // @Then("the page title should be {string}")
-    // public void checkTitle(String titleText) {
-    //     new WebDriverWait(driver, Duration.ofSeconds(10)).until(new ExpectedCondition<Boolean>() {
-    //         public Boolean apply(WebDriver d) {
-    //             return d.getTitle().equals(titleText);
-    //         }
-    //     });
-    // }
-
     @Then("the page title should be {string}")
     public void checkTitle(String titleText) {
         String actualTitle = driver.getTitle();
@@ -63,6 +54,30 @@ public class ExampleSteps {
         String actualHeaderText = allProductsHeader.getText().toLowerCase();
         String expectedHeaderText = headerText.toLowerCase();
         Assert.assertEquals(actualHeaderText, expectedHeaderText, "Header text mismatch");
+    }
+
+    @When("I add {string} to cart")
+    public void i_add_to_cart(String string) {
+        By addBlueTopBy = By.xpath("//div[@class='productinfo text-center'][p='Blue Top']/a[@class='btn btn-default add-to-cart']");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement addBlueTop = wait.until(ExpectedConditions.visibilityOfElementLocated(addBlueTopBy));
+        addBlueTop.click();
+    }
+    @When("I click on the cart link")
+    public void i_click_on_the_cart_link() {
+        By goToCartBy = By.xpath("//*[@id=\'cartModal\']/div/div/div[2]/p[2]/a/u");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement goToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(goToCartBy));
+        goToCart.click();
+    }
+    
+    @Then("I should have {string} in my cart")
+    public void have_in_my_cart(String productNameText) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement productInCart = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.xpath("//table[@id='cart_info_table']//tr[contains(td[@class='cart_description']//h4/a, '" + productNameText + "')]")
+            ));
+        Assert.assertNotNull(productInCart, "Product '" + productNameText + "' not found in the cart");
     }
 
     @After()
