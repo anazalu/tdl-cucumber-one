@@ -1,6 +1,7 @@
 package com.example;
 
 import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -63,12 +65,13 @@ public class ExampleSteps {
         WebElement addBlueTop = wait.until(ExpectedConditions.visibilityOfElementLocated(addBlueTopBy));
         addBlueTop.click();
     }
+    
     @When("I click on the cart link")
     public void i_click_on_the_cart_link() {
-        By goToCartBy = By.xpath("//*[@id=\'cartModal\']/div/div/div[2]/p[2]/a/u");
+        By viewCartBy = By.xpath("//div[@class='modal-content']//div[@class='modal-body']//a[@href='/view_cart']/u");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement goToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(goToCartBy));
-        goToCart.click();
+        WebElement viewCart = wait.until(ExpectedConditions.visibilityOfElementLocated(viewCartBy));
+        viewCart.click();
     }
     
     @Then("I should have {string} in my cart")
@@ -78,6 +81,38 @@ public class ExampleSteps {
             By.xpath("//table[@id='cart_info_table']//tr[contains(td[@class='cart_description']//h4/a, '" + productNameText + "')]")
             ));
         Assert.assertNotNull(productInCart, "Product '" + productNameText + "' not found in the cart");
+    }
+
+    @When("I add these items to cart")
+    public void i_add_multiple_products(DataTable dataTable) {
+        List<String> items = dataTable.asList(String.class);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        for (String item : items) {            
+            By addItemBy = By.xpath("//div[@class='productinfo text-center'][p='" + item + "']/a[@class='btn btn-default add-to-cart']");
+            WebElement addItem = wait.until(ExpectedConditions.visibilityOfElementLocated(addItemBy));
+            addItem.click();
+            
+            By continueShoppingBy = By.xpath("//div[@class='modal-content']//div[@class='modal-footer']//button");
+            //div[@class='modal-footer']//button[@class='btn btn-success close-modal btn-block']
+            WebElement continueShopping = wait.until(ExpectedConditions.visibilityOfElementLocated(continueShoppingBy));
+            continueShopping.click();
+        }
+    }
+
+    @Then("I should have the items in cart")
+    public void i_have_added_multiple_products(DataTable dataTable) {        
+        By goToCartBy = By.xpath("//ul[@class='nav navbar-nav']//a[@href='/view_cart']");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement goToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(goToCartBy));
+        goToCart.click();
+        
+        List<String> items = dataTable.asList(String.class);
+        for (String item : items) {                
+            WebElement productInCart = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//table[@id='cart_info_table']//tr[contains(td[@class='cart_description']//h4/a, '" + item + "')]")
+                ));
+            Assert.assertNotNull(productInCart, "Product '" + item + "' not found in the cart");
+        }
     }
 
     @After()
