@@ -93,7 +93,6 @@ public class ExampleSteps {
             addItem.click();
             
             By continueShoppingBy = By.xpath("//div[@class='modal-content']//div[@class='modal-footer']//button");
-            //div[@class='modal-footer']//button[@class='btn btn-success close-modal btn-block']
             WebElement continueShopping = wait.until(ExpectedConditions.visibilityOfElementLocated(continueShoppingBy));
             continueShopping.click();
         }
