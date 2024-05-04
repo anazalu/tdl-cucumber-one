@@ -44,13 +44,15 @@ public class ExampleSteps {
     @When("I click Products link")
     public void clickProductsLink() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement productsLink = wait.until(ExpectedConditions.visibilityOfElementLocated(productsLinkBy));
+        WebElement productsLink = wait.until(ExpectedConditions.elementToBeClickable(productsLinkBy));
         productsLink.click();
     }
 
     @Then ("the Products page opens that has {string} header")
     public void verifyLocationIsProductsPage(String headerText) {
-        By allProductsHeaderBy = By.xpath("/html/body/section[2]/div[1]/div/div[2]/div/h2");        
+        // By allProductsHeaderBy = By.xpath("/html/body/section[2]/div[1]/div/div[2]/div/h2");        
+        // By allProductsHeaderBy = By.xpath("//div[@class='container']/h2");
+        By allProductsHeaderBy = By.xpath("//h2[contains(., '" + headerText + "')]");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement allProductsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(allProductsHeaderBy));
         String actualHeaderText = allProductsHeader.getText().toLowerCase();
