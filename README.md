@@ -6,4 +6,5 @@ www.automationexercise.com
 ### Running XPath in the Chrome console
 ```
 document.evaluate("//h2[contains(., 'All Products')]", document, null, XPathResult.ANY_TYPE, null).iterateNext()
+document.evaluate("//div[@class='productinfo text-center'][p='Blue Top']/a[@class='btn btn-default add-to-cart']", document, null, XPathResult.ANY_TYPE, null).iterateNext()
 ```

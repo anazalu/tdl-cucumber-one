@@ -64,7 +64,7 @@ public class ExampleSteps {
     public void i_add_to_cart(String string) {
         By addBlueTopBy = By.xpath("//div[@class='productinfo text-center'][p='Blue Top']/a[@class='btn btn-default add-to-cart']");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement addBlueTop = wait.until(ExpectedConditions.visibilityOfElementLocated(addBlueTopBy));
+        WebElement addBlueTop = wait.until(ExpectedConditions.elementToBeClickable(addBlueTopBy));
         addBlueTop.click();
     }
     
@@ -72,7 +72,7 @@ public class ExampleSteps {
     public void i_click_on_the_cart_link() {
         By viewCartBy = By.xpath("//div[@class='modal-content']//div[@class='modal-body']//a[@href='/view_cart']/u");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement viewCart = wait.until(ExpectedConditions.visibilityOfElementLocated(viewCartBy));
+        WebElement viewCart = wait.until(ExpectedConditions.elementToBeClickable(viewCartBy));
         viewCart.click();
     }
     
@@ -91,11 +91,11 @@ public class ExampleSteps {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         for (String item : items) {            
             By addItemBy = By.xpath("//div[@class='productinfo text-center'][p='" + item + "']/a[@class='btn btn-default add-to-cart']");
-            WebElement addItem = wait.until(ExpectedConditions.visibilityOfElementLocated(addItemBy));
+            WebElement addItem = wait.until(ExpectedConditions.elementToBeClickable(addItemBy));
             addItem.click();
             
             By continueShoppingBy = By.xpath("//div[@class='modal-content']//div[@class='modal-footer']//button");
-            WebElement continueShopping = wait.until(ExpectedConditions.visibilityOfElementLocated(continueShoppingBy));
+            WebElement continueShopping = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingBy));
             continueShopping.click();
         }
     }
@@ -104,7 +104,7 @@ public class ExampleSteps {
     public void i_have_added_multiple_products(DataTable dataTable) {        
         By goToCartBy = By.xpath("//ul[@class='nav navbar-nav']//a[@href='/view_cart']");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement goToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(goToCartBy));
+        WebElement goToCart = wait.until(ExpectedConditions.elementToBeClickable(goToCartBy));
         goToCart.click();
         
         List<String> items = dataTable.asList(String.class);
